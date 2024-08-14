@@ -2,7 +2,7 @@ import AppKit
 
 func getActiveBrowserTabURLAppleScriptCommand(_ appId: String) -> String? {
 	switch appId {
-	case "com.google.Chrome", "com.google.Chrome.beta", "com.google.Chrome.dev", "com.google.Chrome.canary", "com.brave.Browser", "com.brave.Browser.beta", "com.brave.Browser.nightly", "com.microsoft.edgemac", "com.microsoft.edgemac.Beta", "com.microsoft.edgemac.Dev", "com.microsoft.edgemac.Canary", "com.mighty.app", "com.ghostbrowser.gb1", "com.bookry.wavebox", "com.pushplaylabs.sidekick", "com.operasoftware.Opera",  "com.operasoftware.OperaNext", "com.operasoftware.OperaDeveloper", "com.vivaldi.Vivaldi", "company.thebrowser.Browser":
+	case "com.google.Chrome", "com.google.Chrome.beta", "com.google.Chrome.dev", "com.google.Chrome.canary", "com.brave.Browser", "com.brave.Browser.beta", "com.brave.Browser.nightly", "com.microsoft.edgemac", "com.microsoft.edgemac.Beta", "com.microsoft.edgemac.Dev", "com.microsoft.edgemac.Canary", "com.mighty.app", "com.ghostbrowser.gb1", "com.bookry.wavebox", "com.pushplaylabs.sidekick", "com.operasoftware.Opera",  "com.operasoftware.OperaNext", "com.operasoftware.OperaDeveloper", "com.operasoftware.OperaGX", "com.vivaldi.Vivaldi", "company.thebrowser.Browser":
 		return "tell app id \"\(appId)\" to get the URL of active tab of front window"
 	case "com.apple.Safari", "com.apple.SafariTechnologyPreview":
 		return "tell app id \"\(appId)\" to get URL of front document"
@@ -89,12 +89,11 @@ let disableScreenRecordingPermission = CommandLine.arguments.contains("--no-scre
 let enableOpenWindowsList = CommandLine.arguments.contains("--open-windows-list")
 
 // Show accessibility permission prompt if needed. Required to get the URL of the active tab in browsers.
-if
-	!disableAccessibilityPermission,
-	!AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary)
-{
-	print("active-win requires the accessibility permission in “System Settings › Privacy & Security › Accessibility”.")
-	exit(1)
+if !disableAccessibilityPermission {
+	if !AXIsProcessTrustedWithOptions(["AXTrustedCheckOptionPrompt": true] as CFDictionary) {
+		print("get-windows requires the accessibility permission in “System Settings › Privacy & Security › Accessibility”.")
+		exit(1)
+	}
 }
 
 // Show screen recording permission prompt if needed. Required to get the complete window title.
@@ -102,7 +101,7 @@ if
 	!disableScreenRecordingPermission,
 	!hasScreenRecordingPermission()
 {
-	print("active-win requires the screen recording permission in “System Settings › Privacy & Security › Screen Recording”.")
+	print("get-windows requires the screen recording permission in “System Settings › Privacy & Security › Screen Recording”.")
 	exit(1)
 }
 
