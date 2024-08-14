@@ -1,6 +1,6 @@
 {
-	"name": "get-windows",
-	"version": "9.2.0",
+	"name": "p8-get-windows-v2",
+	"version": "1.0.7",
 	"description": "Get metadata about the active window and open windows (title, id, bounds, owner, URL, etc)",
 	"license": "MIT",
 	"repository": {
@@ -21,7 +21,7 @@
 	"main": "./index.js",
 	"sideEffects": false,
 	"engines": {
-		"node": ">=18.18"
+		"node": ">=20"
 	},
 	"binary": {
 		"module_name": "node-get-windows",
@@ -40,6 +40,8 @@
 		"build:windows": "node-pre-gyp build",
 		"build:windows:debug": "node-pre-gyp build --debug",
 		"build:macos": "swift build --configuration=release --arch arm64 --arch x86_64 && mv .build/apple/Products/Release/get-windows main",
+		"package": "./node_modules/.bin/node-pre-gyp package",
+		"build": "npm run build:macos && npm run build:windows",
 		"install": "node-pre-gyp install --fallback-to-build"
 	},
 	"files": [
