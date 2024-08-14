@@ -21,12 +21,10 @@ jobs:
         target:
           - x64
         node:
-          - 18
-          - 14
-          - 16
+          - 20
         include:
           - os: windows-latest
-            node: 18
+            node: 20
             host: x86
             target: x86
 
@@ -65,18 +63,18 @@ jobs:
       - name: Package prebuilt binaries
         run: ./node_modules/.bin/node-pre-gyp package --target_arch=${{ env.TARGET }}
 
-      # Run only for matrix.node 18
+      # Run only for matrix.node 20
       - name: Upload binaries to commit artifacts
         uses: actions/upload-artifact@v3
-        if: matrix.node == 18
+        if: matrix.node == 20
         with:
           name: prebuilt-binaries
           path: build/stage/*/*
           retention-days: 7
 
-      # Run only for matrix.node 18
+      # Run only for matrix.node 20
       - name: Upload binaries to GitHub Release
         run: ./node_modules/.bin/node-pre-gyp-github publish
-        if: matrix.node == 18 && startsWith(github.ref, 'refs/tags/')
+        if: matrix.node == 20 && startsWith(github.ref, 'refs/tags/')
         env:
           NODE_PRE_GYP_GITHUB_TOKEN: ${{ github.token }}
